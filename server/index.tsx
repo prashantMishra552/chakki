@@ -10,6 +10,7 @@ app.get('*', (req: Request, res: Response) => {
     res.send(`
     <html>
         <head>
+        <script src="../frontend/dist/bundle.js"></script
         </head>
         <body>
              ${content}
