@@ -4,19 +4,19 @@ import { Express, Request, Response } from 'express';
 import { renderToString } from "react-dom/server";
 import App from '../frontend/src/App';
 const app: Express = express();
+app.use(express.static('frontend/public')); //dir is available to outside world
+
 
 app.get('*', (req: Request, res: Response) => {
     const content = renderToString(<App />);
-    res.send(`
-    <html>
+    res.send(`<html>
         <head>
-        <script src="../frontend/dist/bundle.js"></script
         </head>
         <body>
-             ${content}
+           <div id="root">${content}</div>jfd sdsd
+           <script src="bundle.js"></script>
         <body>
-    </html>
-    `);
+    </html>`);
 
 })
 
