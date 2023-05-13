@@ -1,5 +1,7 @@
 import React from 'react';
-import ReactDom from 'react-dom';
-import App from "./App";
+import App from "./App/App";
+import { hydrateRoot } from 'react-dom/client';
+import { Provider } from "react-redux";
+import { store } from '../../store/store';
 
-ReactDom.render(<App />, document.getElementById('root'))
+hydrateRoot(document.getElementById('root'), <Provider store={store}><App /></Provider>)
