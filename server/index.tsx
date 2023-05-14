@@ -8,9 +8,31 @@ app.use(express.static('frontend/public')); //dir is available to outside world
 import { Provider } from "react-redux";
 import { store } from '../store/store.server';
 import serialize from 'serialize-javascript';
+import {
+    createStaticHandler,
+    createStaticRouter,
+    StaticRouterProvider,
+    StaticHandlerContext
+} from "react-router-dom/server";
 
-app.get('*', (req: Request, res: Response) => {
-    const content = renderToString(<Provider store={store}><App /></Provider>);
+import { routes } from "../router/routes";
+import { createFetchRequest } from "./request";
+const handler = createStaticHandler(routes);
+
+app.get('*', async (req: Request, res: Response) => {
+    //converts express request to global request object
+    const fetchRequest = createFetchRequest(req);
+    const context = await handler.query(fetchRequest) as StaticHandlerContext;
+    const router = createStaticRouter(
+        handler.dataRoutes,
+        context
+    );
+
+    const content = renderToString(
+        <Provider store={store}>
+            <StaticRouterProvider router={router} context={context} />
+        </Provider>
+    );
     res.send(`<html>
         <head>
         </head>
